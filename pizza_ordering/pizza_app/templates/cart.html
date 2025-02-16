@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Cart</h2>
+{% if pizzas %}
+  <ul class="list-group mb-3">
+    {% for pizza in pizzas %}
+      <li class="list-group-item mb-3">
+        <strong>{{ pizza.size }} pizza</strong> &mdash; €{{ pizza.total_price }}<br>
+        <strong>Cheese:</strong> {{ pizza.cheese }}<br>
+        <strong>Sauce:</strong> {{ pizza.sauce }}<br>
+        {% if pizza.toppings.all %}
+          <strong>Toppings:</strong>
+          <ul>
+            {% for topping in pizza.toppings.all %}
+              <li>{{ topping.name }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <em>No extra toppings</em>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <h3>Total Cart Price: €{{ total_cart_price }}</h3>
+  <a href="{% url 'create_pizza' %}" class="btn btn-success mt-3">Add Another Pizza</a>
+  <a href="{% url 'order_details' %}" class="btn btn-primary mt-3">Proceed to Checkout</a>
+{% else %}
+  <p>Your cart is empty.</p>
+  <a href="{% url 'create_pizza' %}" class="btn btn-primary">Create a Pizza</a>
+{% endif %}
+{% endblock %}

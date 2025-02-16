@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Previous Orders</h2>
+<a href="{% url 'create_pizza' %}" class="btn btn-success mb-3">Create New Order</a>
+{% if orders %}
+  <div class="list-group">
+    {% for order in orders %}
+      <div class="list-group-item mb-3">
+        <h5>Order #{{ order.id }} - {{ order.order_date|date:"M d, Y H:i" }}</h5>
+        <p><strong>Total Price:</strong> €{{ order.total_order_price }}</p>
+        <p><strong>Pizzas:</strong></p>
+        <ul>
+          {% for pizza in order.pizzas.all %}
+            <li class="list-group-item mb-3">
+              <strong>{{ pizza.size }} pizza</strong> &mdash; €{{ pizza.total_price }}<br>
+              <strong>Cheese:</strong> {{ pizza.cheese }}<br>
+              <strong>Sauce:</strong> {{ pizza.sauce }}<br>
+              {% if pizza.toppings.all %}
+                <strong>Toppings:</strong>
+                <ul>
+                  {% for topping in pizza.toppings.all %}
+                    <li>{{ topping.name }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <em>No extra toppings</em>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+        <a href="{% url 'order_confirmation' order.id %}" class="btn btn-primary btn-sm">View Details</a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>You have no previous orders.</p>
+{% endif %}
+{% endblock %}
+
